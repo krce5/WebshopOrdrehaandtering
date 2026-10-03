@@ -19,12 +19,41 @@ Console.WriteLine(nyWebshop.UdskrivOrdrer());
 Console.WriteLine("<--------------BETAL ORDRE---------------->");
 nyWebshop.BetalOrdre(11);
 nyWebshop.BetalOrdre(11);
+nyWebshop.BetalOrdre(12);
+nyWebshop.BetalOrdre(13);
+
+Console.WriteLine("<--------------AFSEND ORDRE---------------->");
+nyWebshop.AfsendOrdre(11);
+nyWebshop.AfsendOrdre(12);
+nyWebshop.AfsendOrdre(13);
+
+Console.WriteLine("<----UDSKRIV ALLE UBETALTE ORDRER--------->");
+Console.WriteLine(nyWebshop.UdskrivOrdrer());
+nyWebshop.OpretOrdre(14, 12345678);
+Console.WriteLine(nyWebshop.UdskrivOrdrer());
 
 class Webshop
 {
     List<Kunde> kunderListe = new List<Kunde>();
 
     List<Ordre> ordrerListe = new List<Ordre>();
+
+    public bool AfsendOrdre(int ordreNummer)
+    {
+        Ordre ordre = FindOrdre(ordreNummer);
+        bool svar = TjekTilstand(ordre);
+        if(svar == false)
+        {
+            Console.WriteLine("Afsendelsen er Godkendt.OrdreNR: " + ordre.ordreNummer + "; kunde: " + ordre.kundeRef.navn);
+            ordrerListe.Remove(ordre);      
+        }
+        else
+        {
+            Console.WriteLine("---!FEJL!---- Ordren NR " + ordre.ordreNummer + " er ikke betalt.");
+        }
+        return svar;
+
+    }
 
     public bool BetalOrdre(int ordreNummer)
     {
