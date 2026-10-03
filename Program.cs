@@ -4,18 +4,21 @@ nyWebshop.OpretKunde("Lise Sørensen", 987654321);
 nyWebshop.OpretKunde("Jon Allan", 852963147);
 
 Console.WriteLine("<-------------FIND KUNDE----------------->");
-Console.WriteLine(nyWebshop.findKunde(12345678));
-Console.WriteLine(nyWebshop.findKunde(852963147));
-Console.WriteLine(nyWebshop.findKunde(987654321));
-Console.WriteLine(nyWebshop.findKunde(987654320));
+Console.WriteLine(nyWebshop.FindKunde(12345678));
+Console.WriteLine(nyWebshop.FindKunde(852963147));
+Console.WriteLine(nyWebshop.FindKunde(987654321));
+Console.WriteLine(nyWebshop.FindKunde(987654320));
 
 nyWebshop.OpretOrdre(11, 12345678);
 nyWebshop.OpretOrdre(12, 987654321);
 nyWebshop.OpretOrdre(13, 852963147);
 
-Console.WriteLine("<-------------UDSKRIV ORDRE----------------->");
-Console.WriteLine(nyWebshop.udskrivOrdrer());
+Console.WriteLine("<----UDSKRIV ALLE UBETALTE ORDRER--------->");
+Console.WriteLine(nyWebshop.UdskrivOrdrer());
 
+Console.WriteLine("<--------------BETAL ORDRE---------------->");
+nyWebshop.BetalOrdre(11);
+nyWebshop.BetalOrdre(11);
 
 class Webshop
 {
@@ -23,12 +26,65 @@ class Webshop
 
     List<Ordre> ordrerListe = new List<Ordre>();
 
-    public void VisOrdrer (bool afventerBetaling)
+    public bool BetalOrdre(int ordreNummer)
     {
-        findOrdrer(afventerBetaling);
+        Ordre ordre = FindOrdre(ordreNummer);
+        bool svar = TjekTilstand(ordre);
+        if(svar == true)
+        {
+            Console.WriteLine("Betaling er genemfor! OrdreNR: " + ordre.ordreNummer + "; kunde: " + ordre.kundeRef.navn);
+            ordre.afventerBetaling = false;
+        }
+        else
+        {
+            Console.WriteLine("---!FEJL!---- Ordren er allerede betalt");
+        }
+        return svar;
     }
 
-    private Ordre findOrdrer(bool afventerBetaling)
+    private bool TjekTilstand(Ordre ordre)
+    {
+        bool svar = false;
+
+        if(ordre.afventerBetaling == true)
+        {
+            svar = true;
+        }
+
+        return svar;
+
+    }
+
+    //Metode for at finde specifik ordre ved at søge efter ordreNR
+    private Ordre FindOrdre(int ordreNummer)
+    {
+
+        Ordre svar = null;
+        int i = 0;
+        while (i < ordrerListe.Count)
+        {
+            Ordre ordre = ordrerListe[i];
+            if (ordre.ordreNummer == ordreNummer)
+            {
+                svar = ordre;
+            }
+            i++;
+
+        }
+        return svar;
+
+    }
+
+
+
+
+    public void VisOrdrer (bool afventerBetaling)
+    {
+        FindUbetalteOrdrer(afventerBetaling);
+    }
+
+    //Metode for at finde alle ubetalte ordrer
+    private Ordre FindUbetalteOrdrer(bool afventerBetaling)
     {
 
         Ordre svar = null;
@@ -48,16 +104,16 @@ class Webshop
     }
 
 
-    public string udskrivOrdrer()
+    public string UdskrivOrdrer()
     {
         string svar = "";
         int i = 0;
         while(i < ordrerListe.Count)
         {
-            Ordre o = ordrerListe[i];
-            if(o.afventerBetaling == true)
+            Ordre ordre = ordrerListe[i];
+            if(ordre.afventerBetaling == true)
             {
-                svar = svar + "Ordre NR:" + o.ordreNummer +"; Kunde: " + o.kundeRef.navn + Environment.NewLine;
+                svar = svar + "Ordre NR:" + ordre.ordreNummer +"; Kunde: " + ordre.kundeRef.navn + Environment.NewLine;
 
             }
             i++;
@@ -70,15 +126,15 @@ class Webshop
     public void OpretOrdre(int ordreNummer, int tlfNummer)
     {
 
-        opretO(ordreNummer, tlfNummer);
+        OpretO(ordreNummer, tlfNummer);
 
 
     }
 
-    public void opretO(int ordreNummer, int tlfNummer)
+    public void OpretO(int ordreNummer, int tlfNummer)
     {
         
-        Kunde lokal = find(tlfNummer);
+        Kunde lokal = Find(tlfNummer);
 
         if (lokal == null)
         {
@@ -97,10 +153,10 @@ class Webshop
               
     }
 
-      public string findKunde(int tlfNummer)
+      public string FindKunde(int tlfNummer)
     {
 
-        Kunde kunde = find(tlfNummer);
+        Kunde kunde = Find(tlfNummer);
         if (kunde != null)
         {
             return kunde.navn;
@@ -108,7 +164,7 @@ class Webshop
         return "--Kunden kan ikke findes :( --";
     }
 
-    private Kunde find (int tlfNummer)
+    private Kunde Find (int tlfNummer)
     {
 
         Kunde svar = null;
@@ -129,12 +185,12 @@ class Webshop
 
     public void OpretKunde(string navn, int tlfNummer)
     {
-        opretK(navn, tlfNummer);
+        OpretK(navn, tlfNummer);
 
 
     }
 
-    private void opretK (string navn, int tlfNummer)
+    private void OpretK (string navn, int tlfNummer)
     {
         Kunde kunde = new Kunde();
         kunde.navn = navn;
