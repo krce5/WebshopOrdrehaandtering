@@ -9,11 +9,12 @@ Console.WriteLine(nyWebshop.findKunde(852963147));
 Console.WriteLine(nyWebshop.findKunde(987654321));
 Console.WriteLine(nyWebshop.findKunde(987654320));
 
-Console.WriteLine("<-------------OPRET ORDRE----------------->");
 nyWebshop.OpretOrdre(11, 12345678);
 nyWebshop.OpretOrdre(12, 987654321);
 nyWebshop.OpretOrdre(13, 852963147);
 
+Console.WriteLine("<-------------UDSKRIV ORDRE----------------->");
+Console.WriteLine(nyWebshop.udskrivOrdrer());
 
 
 class Webshop
@@ -22,6 +23,49 @@ class Webshop
 
     List<Ordre> ordrerListe = new List<Ordre>();
 
+    public void VisOrdrer (bool afventerBetaling)
+    {
+        findOrdrer(afventerBetaling);
+    }
+
+    private Ordre findOrdrer(bool afventerBetaling)
+    {
+
+        Ordre svar = null;
+        int i = 0;
+        while (i < ordrerListe.Count)
+        {
+            Ordre ordre = ordrerListe[i];
+            if (ordre.afventerBetaling == afventerBetaling)
+            {
+                svar = ordre;
+            }
+            i++;
+
+        }
+        return svar;
+
+    }
+
+
+    public string udskrivOrdrer()
+    {
+        string svar = "";
+        int i = 0;
+        while(i < ordrerListe.Count)
+        {
+            Ordre o = ordrerListe[i];
+            if(o.afventerBetaling == true)
+            {
+                svar = svar + "Ordre NR:" + o.ordreNummer +"; Kunde: " + o.kundeRef.navn + Environment.NewLine;
+
+            }
+            i++;
+        }
+
+        return svar;    
+
+    }
 
     public void OpretOrdre(int ordreNummer, int tlfNummer)
     {
