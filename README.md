@@ -1,3 +1,6 @@
+Opgavebeskrivelsen: 
+[System 4_ Webshop Ordrehåndtering (Eksamenstræning).pdf](https://github.com/user-attachments/files/33867363/System.4_.Webshop.Ordrehandtering.Eksamenstraening.pdf)
+
 Iteration 1 (UC1)
 <img width="2048" height="1152" alt="Iteration 1" src="https://github.com/user-attachments/assets/a62eb659-7b62-449e-ad0a-6586fb4b18fd" />
 
